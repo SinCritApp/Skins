@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkinRiot Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:#0A0A0F; --surface:#13131A; --surface2:#1C1C27; --surface3:#22222F;
+    --magenta:#FF006E; --cyan:#00F5FF; --yellow:#CFFF04; --green:#00FF88;
+    --white:#F0F0F8; --muted:#7A7A9A; --card:#18181F;
+    --glow-pink:0 0 20px rgba(255,0,110,0.5);
+    --glow-cyan:0 0 16px rgba(0,245,255,0.4);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;min-height:100vh;}
+
+  /* TOP BAR */
+  header{
+    background:rgba(13,13,20,0.98);border-bottom:1px solid rgba(255,0,110,0.25);
+    padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:100;
+  }
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;}
+  .logo span{color:var(--magenta);}
+  .admin-badge{background:rgba(255,0,110,0.15);color:var(--magenta);font-size:10px;font-weight:700;letter-spacing:2px;padding:3px 10px;border-radius:20px;border:1px solid rgba(255,0,110,0.3);}
+  .back-btn{color:var(--muted);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:6px;}
+  .back-btn:hover{color:var(--white);}
+
+  /* TABS */
+  .tabs{display:flex;border-bottom:1px solid var(--surface2);background:var(--surface);}
+  .tab{flex:1;padding:13px;text-align:center;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;}
+  .tab.active{color:var(--magenta);border-bottom-color:var(--magenta);}
+
+  /* SECTIONS */
+  .section{display:none;padding:20px;}
+  .section.active{display:block;}
+
+  /* STATS ROW */
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+  .stat-card{background:var(--card);border-radius:12px;padding:14px;border:1px solid var(--surface2);}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--cyan);}
+  .stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
+  .stat-delta{font-size:11px;color:var(--green);margin-top:4px;}
+
+  /* SECTION TITLE */
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:4px;}
+  .sec-sub{font-size:12px;color:var(--muted);margin-bottom:18px;}
+  .divider{height:1px;background:var(--surface2);margin:20px 0;}
+
+  /* FORM */
+  .form-group{margin-bottom:16px;}
+  .form-group label{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted);display:block;margin-bottom:7px;}
+  .form-group input,.form-group textarea,.form-group select{
+    width:100%;background:var(--surface2);color:var(--white);
+    border:1px solid var(--surface3);border-radius:10px;
+    padding:11px 14px;font-size:13px;font-family:'Inter',sans-serif;
+    transition:border-color .2s;outline:none;
+  }
+  .form-group textarea{min-height:80px;resize:vertical;line-height:1.5;}
+  .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--magenta);}
+  .form-group select option{background:var(--surface2);}
+
+  .emoji-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px;}
+  .emoji-opt{background:var(--surface2);border-radius:8px;padding:10px;text-align:center;font-size:22px;cursor:pointer;border:2px solid transparent;transition:all .2s;}
+  .emoji-opt.selected,.emoji-opt:hover{border-color:var(--magenta);background:rgba(255,0,110,0.1);}
+
+  /* AI BUTTON */
+  .ai-btn{
+    width:100%;background:linear-gradient(135deg,#7B00D4,var(--magenta));
+    color:#fff;border:none;border-radius:10px;padding:14px;
+    font-size:14px;font-weight:800;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:opacity .2s,transform .15s;letter-spacing:.5px;
+    margin-bottom:14px;
+  }
+  .ai-btn:hover{opacity:.9;transform:translateY(-1px);}
+  .ai-btn:disabled{opacity:.5;cursor:not-allowed;}
+  .ai-btn .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* AI RESULT */
+  .ai-result{background:rgba(123,0,212,0.1);border:1px solid rgba(123,0,212,0.3);border-radius:12px;padding:14px;margin-bottom:14px;display:none;}
+  .ai-result.show{display:block;}
+  .ai-result .ai-label{font-size:10px;font-weight:800;letter-spacing:2px;color:#9B59FF;margin-bottom:8px;}
+  .ai-result .ai-field{margin-bottom:10px;}
+  .ai-result .ai-field-name{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-bottom:4px;}
+  .ai-result .ai-field-val{font-size:12px;line-height:1.5;color:var(--white);}
+  .ai-result .ai-field-val.seo-tags{display:flex;flex-wrap:wrap;gap:5px;}
+  .ai-result .ai-field-val.seo-tags span{background:var(--surface2);padding:3px 9px;border-radius:12px;font-size:11px;}
+  .apply-ai-btn{background:rgba(0,255,136,.15);color:var(--green);border:1px solid rgba(0,255,136,.3);border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;}
+  .apply-ai-btn:hover{background:rgba(0,255,136,.25);}
+
+  /* SUBMIT BTN */
+  .submit-btn{
+    width:100%;background:var(--magenta);color:#fff;border:none;border-radius:10px;
+    padding:15px;font-size:15px;font-weight:800;cursor:pointer;
+    box-shadow:var(--glow-pink);transition:transform .15s,opacity .2s;
+    letter-spacing:.5px;margin-top:8px;
+  }
+  .submit-btn:hover{transform:translateY(-2px);}
+  .submit-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  /* PRODUCT LIST */
+  .prod-list{display:flex;flex-direction:column;gap:10px;}
+  .prod-row{
+    background:var(--card);border-radius:12px;padding:12px 14px;
+    display:flex;align-items:center;gap:12px;
+    border:1px solid var(--surface2);
+  }
+  .prod-emoji{font-size:32px;width:44px;text-align:center;}
+  .prod-info{flex:1;}
+  .prod-name{font-size:13px;font-weight:700;}
+  .prod-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+  .prod-price{font-size:13px;font-weight:800;color:var(--magenta);}
+  .delete-btn{background:rgba(255,0,110,0.1);color:var(--magenta);border:1px solid rgba(255,0,110,0.2);border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;}
+  .delete-btn:hover{background:rgba(255,0,110,0.2);}
+
+  /* TOGGLE */
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--surface2);}
+  .toggle-label{font-size:13px;font-weight:600;}
+  .toggle-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+  .toggle{position:relative;width:44px;height:24px;}
+  .toggle input{opacity:0;width:0;height:0;}
+  .slider{position:absolute;inset:0;background:var(--surface3);border-radius:12px;cursor:pointer;transition:.3s;}
+  .slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+  input:checked+.slider{background:var(--magenta);}
+  input:checked+.slider:before{transform:translateX(20px);}
+
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--yellow);color:#000;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:800;opacity:0;transition:all .3s;pointer-events:none;z-index:500;white-space:nowrap;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .empty-state{text-align:center;padding:40px 20px;color:var(--muted);}
+  .empty-state .es-icon{font-size:48px;margin-bottom:12px;}
+  .empty-state p{font-size:13px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:10px">
+    <a href="index.html" class="back-btn">← Store</a>
+    <div class="logo">SKIN<span>RIOT</span></div>
+  </div>
+  <div class="admin-badge">ADMIN</div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('dashboard')">📊 Dashboard</div>
+  <div class="tab" onclick="switchTab('add')">➕ Add Skin</div>
+  <div class="tab" onclick="switchTab('manage')">📦 Manage</div>
+  <div class="tab" onclick="switchTab('settings')">⚙️ Settings</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="section active" id="tab-dashboard">
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-skins">8</div>
+      <div class="stat-label">Total Skins</div>
+      <div class="stat-delta">↑ 2 this week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">₹12.4K</div>
+      <div class="stat-label">Revenue (MTD)</div>
+      <div class="stat-delta">↑ 18% vs last month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">47</div>
+      <div class="stat-label">Orders Today</div>
+      <div class="stat-delta">↑ 8 since yesterday</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">4.8★</div>
+      <div class="stat-label">Avg Rating</div>
+      <div class="stat-delta">Based on 312 reviews</div>
+    </div>
+  </div>
+
+  <div class="sec-title">Quick Actions</div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+    <button class="submit-btn" onclick="switchTab('add')">➕ Add New Skin / Lamination</button>
+    <button class="ai-btn" onclick="switchTab('add');setTimeout(()=>runAI(),300)">🤖 AI Generate & Push Skin</button>
+  </div>
+
+  <div class="sec-title">Recent Orders</div>
+  <div class="prod-list" id="recentOrders">
+    <div class="prod-row"><div class="prod-emoji">📦</div><div class="prod-info"><div class="prod-name">Pink Monster × 1</div><div class="prod-meta">Samsung S25 Ultra · 2 min ago</div></div><div class="prod-price">₹250</div></div>
+    <div class="prod-row"><div class="prod-emoji">📦</div><div class="prod-info"><div class="prod-name">Seasonal Pack × 1</div><div class="prod-meta">iPhone 16 Pro · 14 min ago</div></div><div class="prod-price">₹199</div></div>
+    <div class="prod-row"><div class="prod-emoji">📦</div><div class="prod-info"><div class="prod-name">Neon Kanji × 1</div><div class="prod-meta">OnePlus 13 · 1 hr ago</div></div><div class="prod-price">₹250</div></div>
+  </div>
+</div>
+
+<!-- ADD SKIN -->
+<div class="section" id="tab-add">
+  <div class="sec-title">Add New Skin</div>
+  <div class="sec-sub">Fill details or let AI do it in one click.</div>
+
+  <!-- AI MAGIC BUTTON -->
+  <button class="ai-btn" id="aiMagicBtn" onclick="runAI()">
+    <span id="aiIcon">🤖</span>
+    <span id="aiText">AI Auto-Generate Title, Description & SEO</span>
+  </button>
+
+  <!-- AI RESULT BOX -->
+  <div class="ai-result" id="aiResult">
+    <div class="ai-label">✨ AI GENERATED</div>
+    <div class="ai-field">
+      <div class="ai-field-name">PRODUCT TITLE</div>
+      <div class="ai-field-val" id="aiTitle">—</div>
+    </div>
+    <div class="ai-field">
+      <div class="ai-field-name">DESCRIPTION</div>
+      <div class="ai-field-val" id="aiDesc">—</div>
+    </div>
+    <div class="ai-field">
+      <div class="ai-field-name">SEO META TITLE</div>
+      <div class="ai-field-val" id="aiMeta">—</div>
+    </div>
+    <div class="ai-field">
+      <div class="ai-field-name">SEO KEYWORDS</div>
+      <div class="ai-field-val seo-tags" id="aiTags"></div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="apply-ai-btn" onclick="applyAI()">✅ Apply to Form</button>
+      <button class="apply-ai-btn" style="background:rgba(255,0,110,.1);color:var(--muted);border-color:rgba(255,0,110,.2);" onclick="runAI()">🔄 Regenerate</button>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-group">
+    <label>PRODUCT NAME *</label>
+    <input type="text" id="skinName" placeholder="e.g. Galactic Storm Edition">
+  </div>
+
+  <div class="form-group">
+    <label>DESCRIPTION</label>
+    <textarea id="skinDesc" placeholder="Describe the design, texture, feel..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>PICK EMOJI / ICON</label>
+    <div class="emoji-grid" id="emojiGrid">
+      <div class="emoji-opt selected" onclick="selectEmoji(this)">🎨</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">👾</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">🌊</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">🔮</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">🏎️</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">🌌</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">🔥</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">⚡</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">💎</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">🎭</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">🌈</div>
+      <div class="emoji-opt" onclick="selectEmoji(this)">🦋</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>CATEGORY</label>
+    <select id="skinCat">
+      <option value="3d">3D Feel</option>
+      <option value="abstract">Abstract</option>
+      <option value="cars">Cars</option>
+      <option value="nature">Nature</option>
+      <option value="anime">Anime</option>
+      <option value="minimal">Minimal</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>PRICE (₹)</label>
+    <input type="number" id="skinPrice" value="250" min="1">
+  </div>
+
+  <div class="form-group">
+    <label>BADGE (optional)</label>
+    <input type="text" id="skinBadge" placeholder="e.g. NEW, HOT, 🔥TOP">
+  </div>
+
+  <div class="form-group">
+    <label>SEO META TITLE (optional)</label>
+    <input type="text" id="skinSeoTitle" placeholder="Auto-filled by AI">
+  </div>
+
+  <div class="form-group">
+    <label>SEO KEYWORDS (comma separated)</label>
+    <input type="text" id="skinSeoKeys" placeholder="Auto-filled by AI">
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="addSkin()">🚀 Push to Store</button>
+</div>
+
+<!-- MANAGE -->
+<div class="section" id="tab-manage">
+  <div class="sec-title">All Products</div>
+  <div class="sec-sub">Manage your live store inventory.</div>
+  <div class="prod-list" id="manageProdList">
+    <div class="empty-state"><div class="es-icon">📦</div><p>Loading products...</p></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="section" id="tab-settings">
+  <div class="sec-title">Store Settings</div>
+  <div class="sec-sub">Configure your SkinRiot store.</div>
+
+  <div class="toggle-row">
+    <div><div class="toggle-label">🟢 Store Online</div><div class="toggle-desc">Show store to customers</div></div>
+    <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+  </div>
+  <div class="toggle-row">
+    <div><div class="toggle-label">🎁 Seasonal Pack Active</div><div class="toggle-desc">₹199/month subscription offer</div></div>
+    <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+  </div>
+  <div class="toggle-row">
+    <div><div class="toggle-label">🚚 COD Available</div><div class="toggle-desc">Cash on delivery option</div></div>
+    <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+  </div>
+  <div class="toggle-row">
+    <div><div class="toggle-label">🤖 AI Auto-SEO on Upload</div><div class="toggle-desc">Run AI optimizer on every new skin</div></div>
+    <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="form-group">
+    <label>STORE NAME</label>
+    <input type="text" value="SkinRiot">
+  </div>
+  <div class="form-group">
+    <label>SEASONAL PACK PRICE (₹)</label>
+    <input type="number" value="199">
+  </div>
+  <div class="form-group">
+    <label>WHATSAPP SUPPORT NUMBER</label>
+    <input type="text" placeholder="+91 XXXXXXXXXX">
+  </div>
+  <button class="submit-btn" onclick="showToast('✅ Settings saved!')">Save Settings</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let selectedEmoji = '🎨';
+let aiGenerated = null;
+
+// TAB SWITCH
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const tabs = ['dashboard','add','manage','settings'];
+    t.classList.toggle('active', tabs[i]===tab);
+  });
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='manage') renderManage();
+}
+
+// EMOJI SELECT
+function selectEmoji(el) {
+  document.querySelectorAll('.emoji-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedEmoji = el.textContent;
+}
+
+// AI GENERATOR
+async function runAI() {
+  const btn = document.getElementById('aiMagicBtn');
+  const icon = document.getElementById('aiIcon');
+  const txt = document.getElementById('aiText');
+
+  btn.disabled = true;
+  icon.innerHTML = '<div class="spinner"></div>';
+  txt.textContent = 'AI is crafting your product...';
+
+  const nameHint = document.getElementById('skinName').value || '';
+  const cat = document.getElementById('skinCat').value;
+  const prompt = `You are an expert product copywriter and SEO specialist for a mobile phone skin & back lamination e-commerce store called SkinRiot in India.
+
+Generate product content for a new mobile skin with these details:
+- Category: ${cat}
+- Name hint: ${nameHint || 'creative, trendy design'}
+
+Return ONLY a JSON object (no markdown, no extra text) with exactly these fields:
+{
+  "title": "Product name (max 5 words, punchy, streetwear-inspired)",
+  "description": "2 sentence product description highlighting texture, design style, and feel (max 40 words)",
+  "seoMetaTitle": "SEO title with keywords (max 60 chars) including 'mobile skin', 'phone lamination'",
+  "seoKeywords": ["keyword1","keyword2","keyword3","keyword4","keyword5","keyword6"]
+}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:600,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    let text = data.content.map(c=>c.text||'').join('');
+    text = text.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(text);
+    aiGenerated = parsed;
+
+    document.getElementById('aiTitle').textContent = parsed.title;
+    document.getElementById('aiDesc').textContent = parsed.description;
+    document.getElementById('aiMeta').textContent = parsed.seoMetaTitle;
+    const tagsEl = document.getElementById('aiTags');
+    tagsEl.innerHTML = parsed.seoKeywords.map(k=>`<span>${k}</span>`).join('');
+    document.getElementById('aiResult').classList.add('show');
+
+    showToast('✨ AI content ready! Review & apply.');
+  } catch(e) {
+    showToast('⚠️ AI error – check your connection.');
+    console.error(e);
+  }
+
+  btn.disabled = false;
+  icon.textContent = '🤖';
+  txt.textContent = 'AI Auto-Generate Title, Description & SEO';
+}
+
+function applyAI() {
+  if(!aiGenerated) return;
+  document.getElementById('skinName').value = aiGenerated.title;
+  document.getElementById('skinDesc').value = aiGenerated.description;
+  document.getElementById('skinSeoTitle').value = aiGenerated.seoMetaTitle;
+  document.getElementById('skinSeoKeys').value = aiGenerated.seoKeywords.join(', ');
+  showToast('✅ AI content applied to form!');
+}
+
+// ADD SKIN
+function addSkin() {
+  const name = document.getElementById('skinName').value.trim();
+  if(!name){ showToast('⚠️ Please enter a product name'); return; }
+  
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Pushing to store...';
+
+  const stored = localStorage.getItem('skinriot_products');
+  const arr = stored ? JSON.parse(stored) : [];
+  const newSkin = {
+    id: Date.now(),
+    name,
+    emoji: selectedEmoji,
+    price: parseInt(document.getElementById('skinPrice').value) || 250,
+    category: document.getElementById('skinCat').value,
+    rating: 4.5,
+    badge: document.getElementById('skinBadge').value.trim(),
+    desc: document.getElementById('skinDesc').value.trim() || `${name} – premium 3D feel mobile skin.`,
+    seoTitle: document.getElementById('skinSeoTitle').value.trim(),
+    seoKeys: document.getElementById('skinSeoKeys').value.trim(),
+  };
+  arr.unshift(newSkin);
+  localStorage.setItem('skinriot_products', JSON.stringify(arr));
+  window.dispatchEvent(new Event('storage'));
+
+  // Update stat
+  document.getElementById('stat-skins').textContent = arr.length + 8;
+
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = '🚀 Push to Store';
+    showToast(`🎉 "${name}" is now live!`);
+    // Reset form
+    document.getElementById('skinName').value='';
+    document.getElementById('skinDesc').value='';
+    document.getElementById('skinBadge').value='';
+    document.getElementById('skinSeoTitle').value='';
+    document.getElementById('skinSeoKeys').value='';
+    document.getElementById('aiResult').classList.remove('show');
+    aiGenerated=null;
+    switchTab('manage');
+  }, 800);
+}
+
+// RENDER MANAGE
+function renderManage() {
+  const stored = localStorage.getItem('skinriot_products');
+  const arr = stored ? JSON.parse(stored) : [];
+  const el = document.getElementById('manageProdList');
+  
+  const defaultOnes = [
+    {id:'d1',name:"Pink Monster",emoji:"👾",price:250,category:"3d",badge:"HOT"},
+    {id:'d2',name:"Textured Waves",emoji:"🌊",price:250,category:"abstract",badge:"NEW"},
+    {id:'d3',name:"Green Mustang",emoji:"🏎️",price:250,category:"cars",badge:""},
+    {id:'d4',name:"BMW Edition",emoji:"🚗",price:250,category:"cars",badge:""},
+  ];
+
+  const all = [...arr, ...defaultOnes];
+  if(all.length===0){
+    el.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>No custom skins yet. Add one!</p></div>';
+    return;
+  }
+  el.innerHTML = all.map(p=>`
+    <div class="prod-row">
+      <div class="prod-emoji">${p.emoji}</div>
+      <div class="prod-info">
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-meta">${p.category} ${p.badge?'· '+p.badge:''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="prod-price">₹${p.price}</div>
+        ${!String(p.id).startsWith('d') ? `<button class="delete-btn" onclick="deleteSkin(${p.id})">✕</button>` : '<span style="font-size:11px;color:var(--muted)">default</span>'}
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteSkin(id) {
+  const stored = localStorage.getItem('skinriot_products');
+  let arr = stored ? JSON.parse(stored) : [];
+  const name = arr.find(x=>x.id===id)?.name;
+  arr = arr.filter(x=>x.id!==id);
+  localStorage.setItem('skinriot_products', JSON.stringify(arr));
+  renderManage();
+  showToast(`🗑️ "${name}" removed from store`);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
+</body>
+</html>

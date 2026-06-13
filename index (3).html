@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkinRiot 2.0 – Premium Mobile Vinyl Laminations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<style>
+:root {
+  --black:#0A0A0F; --surface:#13131A; --surface2:#1C1C27;
+  --magenta:#FF006E; --cyan:#00F5FF; --yellow:#CFFF04;
+  --white:#F0F0F8; --muted:#7A7A9A; --card-bg:#18181F;
+  --green:#00FF88;
+  --glow-pink:0 0 20px rgba(255,0,110,0.5);
+  --glow-cyan:0 0 20px rgba(0,245,255,0.5);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden;}
+
+/* ── VIEWS ─────────────────────────────────────────── */
+.view{display:none;animation:fadeIn .22s ease;}
+.view.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── NAVBAR ────────────────────────────────────────── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,10,15,.97);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,0,110,.2);
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;}
+.logo span{color:var(--magenta);}
+.nav-right{display:flex;gap:10px;align-items:center;}
+.admin-link{
+  color:var(--muted);font-size:12px;text-decoration:none;
+  border:1px solid var(--surface2);border-radius:6px;padding:6px 12px;transition:all .2s;
+}
+.admin-link:hover{color:var(--cyan);border-color:var(--cyan);}
+.nav-wa{
+  background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.3);
+  border-radius:8px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;gap:5px;transition:all .2s;
+}
+.nav-wa:hover{background:rgba(0,255,136,.2);}
+
+/* ── MARQUEE ───────────────────────────────────────── */
+.marquee-bar{
+  background:linear-gradient(90deg,var(--magenta),#9B00FF,var(--cyan),var(--magenta));
+  background-size:300% 100%;animation:gradShift 4s linear infinite;
+  padding:8px 0;overflow:hidden;white-space:nowrap;
+}
+@keyframes gradShift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.marquee-inner{display:inline-block;animation:marq 22s linear infinite;}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-inner span{font-size:12px;font-weight:700;letter-spacing:2px;margin:0 32px;}
+
+/* ── HERO ──────────────────────────────────────────── */
+.hero{padding:50px 20px 30px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(255,0,110,.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{font-size:11px;letter-spacing:4px;color:var(--cyan);font-weight:700;text-transform:uppercase;margin-bottom:16px;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,88px);line-height:.95;letter-spacing:3px;}
+.hero h1 .glitch{color:var(--magenta);position:relative;display:inline-block;animation:glitch 3s infinite;}
+@keyframes glitch{
+  0%,95%{text-shadow:none}
+  96%{text-shadow:3px 0 var(--cyan),-3px 0 var(--magenta)}
+  97%{text-shadow:-3px 0 var(--cyan),3px 0 var(--magenta)}
+  98%{text-shadow:3px 0 var(--cyan),-3px 0 var(--magenta)}
+  100%{text-shadow:none}
+}
+.hero p{color:var(--muted);margin:20px auto 28px;max-width:320px;font-size:14px;line-height:1.6;}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+/* ── BUTTONS ───────────────────────────────────────── */
+.btn-primary{
+  background:var(--magenta);color:#fff;border:none;
+  padding:13px 28px;border-radius:10px;font-weight:700;font-size:14px;
+  cursor:pointer;box-shadow:var(--glow-pink);transition:transform .15s,box-shadow .15s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 32px rgba(255,0,110,.7);}
+.btn-ghost{
+  background:transparent;color:var(--white);border:1px solid rgba(255,255,255,.2);
+  padding:13px 28px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;
+  transition:border-color .2s,color .2s;
+}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);}
+.btn-wa{
+  background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.3);
+  padding:13px 28px;border-radius:10px;font-weight:700;font-size:14px;
+  cursor:pointer;width:100%;transition:all .2s;
+}
+.btn-wa:hover{background:rgba(0,255,136,.22);}
+.btn-cyan{
+  background:rgba(0,245,255,.1);color:var(--cyan);border:1px solid rgba(0,245,255,.3);
+  padding:10px 18px;border-radius:10px;font-weight:700;font-size:13px;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+
+/* ── SEASONAL ──────────────────────────────────────── */
+.seasonal{
+  margin:30px 20px;
+  background:linear-gradient(135deg,#1A0A2E,#0D1A2E);
+  border:1px solid rgba(0,245,255,.3);
+  border-radius:18px;padding:24px 20px;position:relative;overflow:hidden;
+}
+.seasonal::after{
+  content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;
+  background:radial-gradient(circle,rgba(0,245,255,.15) 0%,transparent 70%);pointer-events:none;
+}
+.badge-hot{display:inline-block;background:var(--yellow);color:#000;font-size:10px;font-weight:900;letter-spacing:2px;padding:3px 10px;border-radius:20px;margin-bottom:10px;}
+.seasonal h2{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;}
+.seasonal h2 span{color:var(--cyan);}
+.seasonal-meta{color:var(--muted);font-size:13px;margin:8px 0 16px;line-height:1.5;}
+.seasonal-perks{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.perk{display:flex;align-items:center;gap:10px;font-size:13px;}
+.perk-icon{width:28px;height:28px;border-radius:8px;background:rgba(0,245,255,.1);display:flex;align-items:center;justify-content:center;font-size:14px;}
+.price-row{display:flex;align-items:center;gap:14px;}
+.price-big{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--cyan);}
+.price-detail{font-size:11px;color:var(--muted);line-height:1.5;}
+.price-old{text-decoration:line-through;color:var(--muted);}
+
+/* ── SECTION HEADER ────────────────────────────────── */
+.section-header{padding:30px 20px 16px;}
+.section-header h3{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;}
+.section-header p{color:var(--muted);font-size:13px;margin-top:4px;}
+.section-line{width:40px;height:3px;background:var(--magenta);border-radius:2px;margin-top:8px;}
+
+/* ── CATEGORIES ────────────────────────────────────── */
+.cats{display:flex;gap:10px;padding:0 20px 20px;overflow-x:auto;scrollbar-width:none;}
+.cats::-webkit-scrollbar{display:none;}
+.cat-pill{
+  flex-shrink:0;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;
+  border:1px solid var(--surface2);color:var(--muted);cursor:pointer;transition:all .2s;
+  white-space:nowrap;background:var(--surface);
+}
+.cat-pill.active,.cat-pill:hover{border-color:var(--magenta);color:var(--magenta);background:rgba(255,0,110,.08);}
+.cat-pill.cp-custom.active,.cat-pill.cp-custom:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.08);}
+
+/* ── PRODUCTS GRID ─────────────────────────────────── */
+.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 20px 30px;}
+.product-card{
+  background:var(--card-bg);border-radius:14px;border:1px solid var(--surface2);
+  overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;
+  position:relative;
+}
+.product-card:hover{transform:translateY(-3px);border-color:var(--magenta);box-shadow:var(--glow-pink);}
+.product-card.is-custom:hover{border-color:var(--cyan);box-shadow:var(--glow-cyan);}
+.product-img{
+  width:100%;aspect-ratio:1/1.1;background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.product-card.is-custom .product-img{background:linear-gradient(135deg,#0D1A2E,#1A0A2E);}
+.placeholder{font-size:56px;}
+.product-info{padding:10px 10px 12px;}
+.custom-eyebrow{font-size:9px;color:var(--cyan);letter-spacing:2px;font-weight:700;margin-bottom:4px;text-transform:uppercase;}
+.product-name{font-size:12px;font-weight:700;line-height:1.3;margin-bottom:6px;}
+.product-prices{display:flex;align-items:center;gap:8px;}
+.product-price{font-size:13px;font-weight:800;color:var(--magenta);}
+.product-old{font-size:11px;color:var(--muted);text-decoration:line-through;}
+.product-badge{
+  position:absolute;top:8px;left:8px;
+  background:var(--yellow);color:#000;font-size:9px;font-weight:900;
+  padding:2px 7px;border-radius:10px;letter-spacing:1px;
+}
+.product-badge.badge-custom{background:var(--cyan);color:#000;}
+.product-rating{font-size:10px;color:var(--muted);margin-top:3px;}
+.product-rating .stars{color:#FFB800;}
+
+/* ── TRUST ─────────────────────────────────────────── */
+.trust{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;}
+.trust-card{background:var(--surface);border-radius:12px;padding:14px 12px;text-align:center;}
+.trust-card .t-icon{font-size:24px;margin-bottom:6px;}
+.trust-card .t-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--cyan);}
+.trust-card .t-label{font-size:11px;color:var(--muted);}
+
+/* ── FOOTER ────────────────────────────────────────── */
+footer{background:var(--surface);border-top:1px solid var(--surface2);padding:28px 20px 90px;text-align:center;}
+footer .f-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;margin-bottom:8px;}
+footer .f-logo span{color:var(--magenta);}
+footer p{font-size:12px;color:var(--muted);}
+footer .socials{display:flex;gap:14px;justify-content:center;margin:14px 0;}
+footer .soc-btn{width:36px;height:36px;background:var(--surface2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;}
+
+/* ── BOTTOM NAV ────────────────────────────────────── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(13,13,20,.97);backdrop-filter:blur(16px);
+  border-top:1px solid var(--surface2);
+  display:flex;justify-content:space-around;padding:10px 0 16px;
+}
+.bnav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:0 14px;position:relative;}
+.bnav-icon{font-size:20px;}
+.bnav-label{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;}
+.bnav-item.active .bnav-icon{filter:drop-shadow(0 0 6px var(--magenta));}
+.bnav-item.active .bnav-label{color:var(--magenta);}
+.cart-badge{
+  position:absolute;top:-2px;right:6px;
+  background:var(--magenta);color:#fff;font-size:9px;font-weight:900;
+  min-width:16px;height:16px;border-radius:8px;
+  display:none;align-items:center;justify-content:center;padding:0 4px;
+}
+.cart-badge.show{display:flex;}
+
+/* ── SEARCH VIEW ───────────────────────────────────── */
+.search-wrap{padding:20px;}
+.search-box{position:relative;margin-bottom:14px;}
+.search-box input{
+  width:100%;background:var(--surface);color:var(--white);
+  border:1px solid var(--surface2);border-radius:14px;
+  padding:13px 44px 13px 44px;font-size:14px;font-family:'Inter',sans-serif;
+  outline:none;transition:border-color .2s;
+}
+.search-box input:focus{border-color:var(--magenta);}
+.s-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:17px;pointer-events:none;}
+.s-clear{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:var(--surface2);border:none;color:var(--muted);
+  width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:12px;
+  align-items:center;justify-content:center;display:none;
+}
+.pop-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.pop-tag{
+  background:var(--surface2);color:var(--muted);border:none;
+  border-radius:16px;padding:5px 13px;font-size:11px;font-weight:600;cursor:pointer;
+  transition:all .2s;
+}
+.pop-tag:hover{color:var(--white);}
+.search-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1.5px;margin-bottom:12px;}
+.no-results{text-align:center;padding:40px 20px;}
+.no-results .nri{font-size:48px;margin-bottom:12px;}
+.no-results p{font-size:13px;color:var(--muted);}
+
+/* ── CART VIEW ─────────────────────────────────────── */
+.cart-wrap{padding:20px;padding-bottom:100px;}
+.cart-head{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;}
+.cart-sub{font-size:12px;color:var(--muted);margin-bottom:20px;margin-top:2px;}
+.cart-empty-state{text-align:center;padding:60px 20px;}
+.cart-empty-state .cei{font-size:64px;margin-bottom:16px;}
+.cart-empty-state h3{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;margin-bottom:8px;}
+.cart-empty-state p{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.cart-items{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+.cart-item{
+  background:var(--card-bg);border:1px solid var(--surface2);
+  border-radius:14px;padding:14px;display:flex;gap:12px;align-items:flex-start;
+}
+.ci-emoji{font-size:36px;flex-shrink:0;width:46px;text-align:center;}
+.ci-info{flex:1;min-width:0;}
+.ci-name{font-size:13px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ci-model{font-size:11px;color:var(--cyan);margin-bottom:8px;}
+.ci-qty{display:flex;align-items:center;gap:8px;}
+.qty-btn{background:var(--surface2);color:var(--white);border:none;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.qty-num{font-size:14px;font-weight:700;min-width:18px;text-align:center;}
+.ci-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;}
+.ci-price{font-size:14px;font-weight:800;color:var(--magenta);}
+.ci-remove{background:rgba(255,0,110,.1);color:var(--magenta);border:1px solid rgba(255,0,110,.2);border-radius:6px;padding:4px 9px;font-size:11px;cursor:pointer;}
+.cart-summary{background:var(--surface);border:1px solid var(--surface2);border-radius:14px;padding:16px;margin-bottom:16px;}
+.sum-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;}
+.sum-row.total{border-top:1px solid var(--surface2);margin-top:8px;padding-top:14px;font-size:15px;font-weight:800;}
+.sum-row.total .sv{color:var(--magenta);font-family:'Bebas Neue',sans-serif;font-size:22px;}
+.checkout-btn{
+  width:100%;background:linear-gradient(135deg,#7B00D4,var(--magenta));
+  color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:800;
+  cursor:pointer;box-shadow:0 0 24px rgba(255,0,110,.4);
+  transition:transform .15s,box-shadow .15s;letter-spacing:.5px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.checkout-btn:hover{transform:translateY(-2px);box-shadow:0 0 36px rgba(255,0,110,.6);}
+.pm-row{display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap;}
+.pm-tag{background:var(--surface);border:1px solid var(--surface2);border-radius:8px;padding:5px 11px;font-size:10px;color:var(--muted);font-weight:600;}
+
+/* ── ACCOUNT VIEW ──────────────────────────────────── */
+.acc-wrap{padding:20px;padding-bottom:100px;}
+.acc-hero{
+  background:linear-gradient(135deg,#1A0A2E,#0D1A2E);border-radius:16px;
+  padding:24px 20px;text-align:center;margin-bottom:20px;
+  border:1px solid rgba(0,245,255,.2);
+}
+.acc-avatar{width:60px;height:60px;background:var(--magenta);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;}
+.acc-hero h3{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;}
+.acc-hero p{font-size:12px;color:var(--muted);margin-top:4px;}
+.acc-sec-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1.5px;margin-bottom:14px;}
+.wa-support-box{
+  background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.3);
+  border-radius:14px;padding:18px;margin-bottom:20px;text-align:center;
+}
+.wa-support-box .ws-ic{font-size:40px;margin-bottom:10px;}
+.wa-support-box h4{font-weight:700;margin-bottom:6px;font-size:15px;}
+.wa-support-box p{font-size:12px;color:var(--muted);margin-bottom:14px;}
+.acc-card{
+  background:var(--card-bg);border:1px solid var(--surface2);border-radius:12px;
+  padding:14px 16px;margin-bottom:10px;cursor:pointer;
+  display:flex;align-items:center;gap:12px;transition:border-color .2s;
+}
+.acc-card:hover{border-color:rgba(255,0,110,.3);}
+.ac-icon{font-size:24px;}
+.ac-info{flex:1;}
+.ac-title{font-size:13px;font-weight:700;}
+.ac-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.ac-arrow{color:var(--muted);font-size:18px;}
+.track-row{display:flex;gap:8px;}
+.track-input{
+  flex:1;background:var(--surface2);color:var(--white);
+  border:1px solid var(--surface2);border-radius:8px;
+  padding:10px 12px;font-size:13px;outline:none;font-family:'Inter',sans-serif;
+  transition:border-color .2s;
+}
+.track-input:focus{border-color:var(--cyan);}
+
+/* ── MODAL OVERLAY ─────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.85);backdrop-filter:blur(6px);
+  align-items:flex-end;
+}
+.modal-overlay.open{display:flex;}
+.modal-sheet{
+  background:var(--surface);width:100%;border-radius:20px 20px 0 0;
+  padding:20px 20px 36px;max-height:92vh;overflow-y:auto;
+}
+.drag-pill{width:40px;height:4px;background:var(--surface2);border-radius:2px;margin:0 auto 16px;}
+
+/* Product modal */
+.modal-sheet h3{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;margin-bottom:4px;}
+.modal-img-wrap{width:100%;border-radius:12px;aspect-ratio:1/1;background:var(--surface2);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.modal-prices{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.modal-price{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--magenta);}
+.modal-old{font-size:16px;color:var(--muted);text-decoration:line-through;}
+.modal-desc{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:18px;}
+.modal-selects{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.msel-group label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-bottom:6px;display:block;}
+.msel-group select{
+  width:100%;background:var(--surface2);color:var(--white);
+  border:1px solid var(--surface2);border-radius:8px;
+  padding:11px 12px;font-size:13px;appearance:none;outline:none;
+  transition:border-color .2s;
+}
+.msel-group select:focus{border-color:var(--magenta);}
+
+/* Payment modal */
+.pay-header{text-align:center;margin-bottom:18px;}
+.pay-header .ph-badge{font-size:10px;color:var(--cyan);font-weight:700;letter-spacing:2px;margin-bottom:8px;}
+.pay-header h3{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;}
+.pay-header p{font-size:12px;color:var(--muted);}
+.pay-amount-row{
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--surface2);border-radius:10px;padding:12px 14px;margin-bottom:16px;
+}
+.par-left .par-label{font-size:10px;color:var(--muted);margin-bottom:3px;}
+.par-left .par-amount{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--magenta);}
+.par-right{text-align:right;}
+.par-right .par-label{font-size:10px;color:var(--muted);margin-bottom:3px;}
+.par-right .par-id{font-size:12px;font-weight:700;color:var(--white);}
+.qr-wrap{text-align:center;margin-bottom:16px;}
+.qr-box{display:inline-block;padding:14px;background:#fff;border-radius:16px;box-shadow:0 0 28px rgba(0,245,255,.3);}
+.qr-caption{font-size:11px;color:var(--muted);margin-top:8px;}
+.upi-id-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--surface2);border-radius:10px;padding:10px 14px;margin-bottom:16px;
+}
+.upi-id-row .uid-label{font-size:10px;color:var(--muted);margin-bottom:2px;}
+.upi-id-row .uid-val{font-size:14px;font-weight:700;color:var(--cyan);}
+.copy-btn{background:rgba(0,245,255,.1);color:var(--cyan);border:1px solid rgba(0,245,255,.3);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;}
+.pay-steps{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.pay-step{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--muted);}
+.ps-num{width:22px;height:22px;background:var(--magenta);color:#fff;border-radius:50%;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.wa-pay-btn{
+  width:100%;background:linear-gradient(135deg,#00C853,#00FF88);
+  color:#000;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:900;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 0 20px rgba(0,255,136,.4);transition:opacity .2s,transform .15s;letter-spacing:.3px;
+}
+.wa-pay-btn:hover{opacity:.9;transform:translateY(-1px);}
+.pay-note{text-align:center;font-size:11px;color:var(--muted);margin-top:10px;}
+
+/* Custom design modal */
+.custom-sheet{background:linear-gradient(180deg,#0D1A2E 0%,var(--surface) 40%);}
+.custom-header{text-align:center;margin-bottom:20px;}
+.custom-header .ch-badge{
+  display:inline-block;background:rgba(0,245,255,.12);color:var(--cyan);
+  font-size:10px;font-weight:900;letter-spacing:2px;
+  padding:4px 12px;border-radius:20px;margin-bottom:10px;border:1px solid rgba(0,245,255,.3);
+}
+.custom-header h3{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;}
+.custom-header p{font-size:12px;color:var(--muted);}
+.cf-group{margin-bottom:14px;}
+.cf-group label{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted);display:block;margin-bottom:7px;}
+.cf-group select,.cf-group input,.cf-group textarea{
+  width:100%;background:var(--surface2);color:var(--white);
+  border:1px solid var(--surface2);border-radius:10px;
+  padding:11px 14px;font-size:13px;font-family:'Inter',sans-serif;
+  transition:border-color .2s;outline:none;
+}
+.cf-group select:focus,.cf-group input:focus,.cf-group textarea:focus{border-color:var(--cyan);}
+.cf-group textarea{min-height:80px;resize:vertical;line-height:1.5;}
+.dt-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.dt-tab{
+  flex:1;padding:10px;text-align:center;border-radius:10px;cursor:pointer;
+  background:var(--surface2);border:1px solid transparent;
+  font-size:12px;font-weight:700;color:var(--muted);transition:all .2s;
+}
+.dt-tab.active{background:rgba(0,245,255,.1);border-color:var(--cyan);color:var(--cyan);}
+.upload-zone{
+  border:2px dashed rgba(0,245,255,.3);border-radius:12px;
+  padding:24px;text-align:center;cursor:pointer;
+  transition:all .2s;background:rgba(0,245,255,.03);
+}
+.upload-zone:hover{border-color:var(--cyan);background:rgba(0,245,255,.06);}
+.uz-icon{font-size:36px;margin-bottom:8px;}
+.uz-text{font-size:13px;color:var(--muted);}
+.uz-hint{font-size:11px;color:var(--cyan);font-weight:700;margin-top:4px;}
+#uploadPreview{display:none;}
+#uploadPreview img{width:100%;border-radius:10px;margin-bottom:8px;}
+.clear-photo{width:100%;background:rgba(255,0,110,.1);color:var(--magenta);border:1px solid rgba(255,0,110,.2);border-radius:8px;padding:8px;font-size:12px;cursor:pointer;}
+.price-est{display:flex;justify-content:space-between;align-items:center;background:rgba(255,0,110,.08);border:1px solid rgba(255,0,110,.2);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.pe-label{font-size:12px;color:var(--muted);}
+.pe-price{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--magenta);}
+.photo-note{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+.custom-wa-btn{
+  width:100%;background:linear-gradient(135deg,#00C853,#00FF88);
+  color:#000;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:900;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 0 20px rgba(0,255,136,.4);transition:opacity .2s;letter-spacing:.3px;
+}
+.custom-wa-btn:hover{opacity:.9;}
+
+/* ── TOAST ─────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--yellow);color:#000;padding:10px 22px;border-radius:20px;
+  font-size:13px;font-weight:800;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══════════════════════════════════════════════ -->
+<nav>
+  <div class="logo">SKIN<span>RIOT</span></div>
+  <div class="nav-right">
+    <a href="admin.html" class="admin-link">⚙ Admin</a>
+    <button class="nav-wa" onclick="openWA()">💬 WhatsApp</button>
+  </div>
+</nav>
+
+<!-- ═══ MARQUEE ══════════════════════════════════════════════ -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span>🔥 FREE SHIPPING ABOVE ₹499</span>
+    <span>✨ 500+ PHONE MODELS</span>
+    <span>🎨 CUSTOM VINYL DESIGNS AVAILABLE</span>
+    <span>📱 PAY VIA UPI · PAYTM · PHONEPE</span>
+    <span>🔥 FREE SHIPPING ABOVE ₹499</span>
+    <span>✨ 500+ PHONE MODELS</span>
+    <span>🎨 CUSTOM VINYL DESIGNS AVAILABLE</span>
+    <span>📱 PAY VIA UPI · PAYTM · PHONEPE</span>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║                    HOME VIEW                            ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="view active" id="view-home">
+
+  <section class="hero">
+    <p class="hero-eyebrow">🔥 India's #1 Mobile Vinyl Laminations</p>
+    <h1>YOUR PHONE<br><span class="glitch">REBORN</span></h1>
+    <p>Premium vinyl back laminations. Scratch-proof, bubble-free, removable. 500+ designs for every phone model.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="document.getElementById('productsGrid').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+      <button class="btn-ghost" onclick="openCustomModal()">🎨 Custom Design</button>
+    </div>
+  </section>
+
+  <!-- SEASONAL PACK -->
+  <div class="seasonal">
+    <div class="badge-hot">🔥 BEST VALUE</div>
+    <h2>SEASONAL <span>PACK</span></h2>
+    <p class="seasonal-meta">Switch your phone's look every month. Get 3 premium vinyl laminations delivered to your door.</p>
+    <div class="seasonal-perks">
+      <div class="perk"><div class="perk-icon">🎨</div><span>3 fresh vinyl wraps every month, hand-picked from new drops</span></div>
+      <div class="perk"><div class="perk-icon">💸</div><span>Save up to 40% vs buying individually</span></div>
+      <div class="perk"><div class="perk-icon">🚚</div><span>Free priority shipping every month</span></div>
+      <div class="perk"><div class="perk-icon">🔄</div><span>Cancel anytime, no lock-ins</span></div>
+    </div>
+    <div class="price-row">
+      <div class="price-big">₹199</div>
+      <div class="price-detail">
+        <div class="price-old">₹450/month</div>
+        per month · billed monthly<br>
+        <span style="color:var(--cyan);font-weight:700">Save ₹251!</span>
+      </div>
+    </div>
+    <button class="btn-primary" style="margin-top:18px;width:100%;font-size:15px;" onclick="addSeasonalToCart()">Subscribe Now – ₹199/mo</button>
+  </div>
+
+  <!-- TRUST -->
+  <div class="trust">
+    <div class="trust-card"><div class="t-icon">📦</div><div class="t-num">50K+</div><div class="t-label">Orders Shipped</div></div>
+    <div class="trust-card"><div class="t-icon">⭐</div><div class="t-num">4.8</div><div class="t-label">Average Rating</div></div>
+    <div class="trust-card"><div class="t-icon">📱</div><div class="t-num">500+</div><div class="t-label">Phone Models</div></div>
+    <div class="trust-card"><div class="t-icon">🎨</div><div class="t-num">200+</div><div class="t-label">Designs</div></div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="section-header">
+    <h3>🔥 Hot Drops</h3>
+    <p>New vinyl laminations added weekly. Limited stock.</p>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="cats" id="catBar">
+    <div class="cat-pill active" onclick="filterCat(this,'all')">All</div>
+    <div class="cat-pill cp-custom" onclick="filterCat(this,'custom')">✨ Custom</div>
+    <div class="cat-pill" onclick="filterCat(this,'3d')">3D Feel</div>
+    <div class="cat-pill" onclick="filterCat(this,'abstract')">Abstract</div>
+    <div class="cat-pill" onclick="filterCat(this,'cars')">Cars</div>
+    <div class="cat-pill" onclick="filterCat(this,'nature')">Nature</div>
+    <div class="cat-pill" onclick="filterCat(this,'anime')">Anime</div>
+    <div class="cat-pill" onclick="filterCat(this,'minimal')">Minimal</div>
+  </div>
+
+  <div class="products-grid" id="productsGrid"></div>
+
+  <footer>
+    <div class="f-logo">SKIN<span>RIOT</span></div>
+    <div class="socials">
+      <div class="soc-btn" onclick="openWA()">💬</div>
+      <div class="soc-btn">📸</div>
+      <div class="soc-btn">🐦</div>
+      <div class="soc-btn">▶️</div>
+    </div>
+    <p>© 2026 SkinRiot. All rights reserved.<br>500+ phone models · UPI / Paytm · WhatsApp support</p>
+  </footer>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║                   SEARCH VIEW                           ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="view" id="view-search">
+  <div class="search-wrap">
+    <div class="section-header" style="padding:20px 0 16px">
+      <h3>🔍 Search</h3>
+      <p>Find your perfect vinyl lamination</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="search-box">
+      <span class="s-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search designs, brands, styles..." oninput="doSearch(this.value)">
+      <button class="s-clear" id="sClear" onclick="clearSearch()">✕</button>
+    </div>
+    <div class="pop-tags">
+      <button class="pop-tag" onclick="setSearch('3D')">3D Feel</button>
+      <button class="pop-tag" onclick="setSearch('Abstract')">Abstract</button>
+      <button class="pop-tag" onclick="setSearch('Anime')">Anime</button>
+      <button class="pop-tag" onclick="setSearch('Cars')">Cars</button>
+      <button class="pop-tag" onclick="setSearch('Nature')">Nature</button>
+      <button class="pop-tag" onclick="setSearch('Minimal')">Minimal</button>
+      <button class="pop-tag" onclick="setSearch('Custom')">Custom</button>
+    </div>
+    <div class="search-label" id="searchLabel">ALL LAMINATIONS</div>
+    <div class="products-grid" id="searchGrid"></div>
+    <div class="no-results" id="noResults" style="display:none">
+      <div class="nri">🔍</div>
+      <p>No results for that search.<br>Try "anime", "cars" or "custom"</p>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║                    CART VIEW                            ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="view" id="view-cart">
+  <div class="cart-wrap">
+    <div class="cart-head">🛒 Cart</div>
+    <div class="cart-sub" id="cartSub">0 items</div>
+
+    <div id="cartEmptyState" class="cart-empty-state">
+      <div class="cei">🛒</div>
+      <h3>Cart is empty</h3>
+      <p>Browse our vinyl laminations and add some to cart</p>
+      <button class="btn-primary" onclick="switchView('home')">Browse Designs</button>
+    </div>
+
+    <div id="cartFilledState" style="display:none">
+      <div class="cart-items" id="cartItemsList"></div>
+      <div class="cart-summary">
+        <div class="sum-row"><span>Subtotal</span><span id="sSubtotal">₹0</span></div>
+        <div class="sum-row" id="sShipRow"><span>Shipping</span><span id="sShipping">₹49</span></div>
+        <div class="sum-row" id="sFreeRow" style="display:none"><span>🎉 Free Shipping!</span><span style="color:var(--green)">−₹49</span></div>
+        <div class="sum-row total"><span>Total</span><span class="sv" id="sTotal">₹0</span></div>
+      </div>
+      <button class="checkout-btn" onclick="openPaymentModal()">
+        <span>📲</span> Pay via Paytm / UPI
+      </button>
+      <div class="pm-row">
+        <div class="pm-tag">🟦 Paytm</div>
+        <div class="pm-tag">💜 PhonePe</div>
+        <div class="pm-tag">💚 GPay</div>
+        <div class="pm-tag">🟠 BHIM</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║                  ACCOUNT VIEW                           ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="view" id="view-account">
+  <div class="acc-wrap">
+    <div class="acc-hero">
+      <div class="acc-avatar">👤</div>
+      <h3>MY ACCOUNT</h3>
+      <p>Track orders · Returns · Custom designs</p>
+      <button class="btn-ghost" style="margin-top:14px;padding:9px 22px;font-size:13px;" onclick="openWA()">💬 Chat Support</button>
+    </div>
+
+    <div class="wa-support-box">
+      <div class="ws-ic">💬</div>
+      <h4>WhatsApp Business Support</h4>
+      <p>Instant help, order tracking, custom design requests — all on WhatsApp</p>
+      <button class="btn-wa" onclick="openWA()">Open WhatsApp Chat</button>
+    </div>
+
+    <div class="acc-sec-title">MY ORDERS</div>
+    <div id="myOrders">
+      <div class="acc-card" style="cursor:default">
+        <div class="ac-icon">📦</div>
+        <div class="ac-info">
+          <div class="ac-title">No orders yet</div>
+          <div class="ac-sub">Completed orders will appear here</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-sec-title" style="margin-top:20px">TRACK ORDER</div>
+    <div style="background:var(--surface);border-radius:12px;padding:16px;border:1px solid var(--surface2);margin-bottom:20px;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:700;letter-spacing:1px">ENTER ORDER ID</div>
+      <div class="track-row">
+        <input class="track-input" type="text" id="trackInput" placeholder="e.g. SR-20260614-001">
+        <button class="btn-cyan" onclick="trackOrder()">Track</button>
+      </div>
+    </div>
+
+    <div class="acc-sec-title">QUICK LINKS</div>
+    <div class="acc-card" onclick="openWA('Hi SkinRiot! I want to return/replace my vinyl lamination.')">
+      <div class="ac-icon">🔄</div>
+      <div class="ac-info"><div class="ac-title">Return & Replace</div><div class="ac-sub">Hassle-free via WhatsApp</div></div>
+      <div class="ac-arrow">›</div>
+    </div>
+    <div class="acc-card" onclick="openCustomModal()">
+      <div class="ac-icon">🎨</div>
+      <div class="ac-info"><div class="ac-title">Custom Vinyl Design</div><div class="ac-sub">Print your photo on a vinyl lamination</div></div>
+      <div class="ac-arrow">›</div>
+    </div>
+    <div class="acc-card" onclick="openWA('Hi SkinRiot! I need help applying my vinyl lamination. Can you guide me?')">
+      <div class="ac-icon">❓</div>
+      <div class="ac-info"><div class="ac-title">Application Guide & FAQ</div><div class="ac-sub">Bubble-free tips & care instructions</div></div>
+      <div class="ac-arrow">›</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BOTTOM NAV ════════════════════════════════════════════ -->
+<div class="bottom-nav">
+  <div class="bnav-item active" id="bnav-home" onclick="switchView('home')">
+    <div class="bnav-icon">🏠</div><div class="bnav-label">HOME</div>
+  </div>
+  <div class="bnav-item" id="bnav-search" onclick="switchView('search')">
+    <div class="bnav-icon">🔍</div><div class="bnav-label">SEARCH</div>
+  </div>
+  <div class="bnav-item" id="bnav-cart" onclick="switchView('cart')">
+    <div class="bnav-icon">🛒</div>
+    <div class="cart-badge" id="cartBadge">0</div>
+    <div class="bnav-label">CART</div>
+  </div>
+  <div class="bnav-item" id="bnav-account" onclick="switchView('account')">
+    <div class="bnav-icon">👤</div><div class="bnav-label">ACCOUNT</div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║              PRODUCT DETAIL MODAL                       ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="modal-overlay" id="productModal" onclick="if(event.target===this)closeProdModal()">
+  <div class="modal-sheet">
+    <div class="drag-pill"></div>
+    <div class="modal-img-wrap" id="modalImg"></div>
+    <h3 id="modalName"></h3>
+    <div class="modal-prices">
+      <div class="modal-price" id="modalPrice"></div>
+      <div class="modal-old">₹450</div>
+    </div>
+    <p class="modal-desc" id="modalDesc"></p>
+    <div class="modal-selects">
+      <div class="msel-group">
+        <label>SELECT BRAND *</label>
+        <select id="modalBrand" onchange="populateModalModels()">
+          <option value="">— Choose Brand —</option>
+        </select>
+      </div>
+      <div class="msel-group">
+        <label>SELECT MODEL *</label>
+        <select id="modalModel">
+          <option value="">— Choose Model —</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;font-size:15px;padding:15px;" onclick="addToCart()">
+      Add to Cart – <span id="modalBtnPrice"></span>
+    </button>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║           PAYTM / UPI PAYMENT MODAL                     ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="modal-overlay" id="paymentModal" onclick="if(event.target===this)closePayModal()">
+  <div class="modal-sheet">
+    <div class="drag-pill"></div>
+
+    <div class="pay-header">
+      <div class="ph-badge">🔒 SECURE UPI PAYMENT</div>
+      <h3>SCAN & PAY</h3>
+      <p>Paytm · PhonePe · Google Pay · BHIM · Any UPI</p>
+    </div>
+
+    <div class="pay-amount-row">
+      <div class="par-left">
+        <div class="par-label">TOTAL AMOUNT</div>
+        <div class="par-amount" id="payAmount">₹0</div>
+      </div>
+      <div class="par-right">
+        <div class="par-label">ORDER ID</div>
+        <div class="par-id" id="payOrderId">—</div>
+      </div>
+    </div>
+
+    <div class="qr-wrap">
+      <div class="qr-box">
+        <canvas id="upiQR"></canvas>
+      </div>
+      <div class="qr-caption">Scan with any UPI app to pay</div>
+    </div>
+
+    <div class="upi-id-row">
+      <div>
+        <div class="uid-label">UPI ID</div>
+        <div class="uid-val" id="showUpiId">skinriot@paytm</div>
+      </div>
+      <button class="copy-btn" onclick="copyUPI()">📋 Copy</button>
+    </div>
+
+    <div class="pay-steps">
+      <div class="pay-step"><div class="ps-num">1</div><span>Open Paytm / PhonePe / GPay on your phone</span></div>
+      <div class="pay-step"><div class="ps-num">2</div><span>Scan the QR above <b style="color:var(--white)">or</b> send to the UPI ID manually</span></div>
+      <div class="pay-step"><div class="ps-num">3</div><span>Enter the exact amount shown and confirm payment</span></div>
+      <div class="pay-step"><div class="ps-num">4</div><span>Tap below to send your payment screenshot on WhatsApp for instant order confirmation</span></div>
+    </div>
+
+    <button class="wa-pay-btn" onclick="confirmViaWA()">
+      💬 Confirm Order via WhatsApp
+    </button>
+    <div class="pay-note">Order confirmed after payment verification · Usually within 30 min</div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║            CUSTOM DESIGN MODAL                          ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="modal-overlay" id="customModal" onclick="if(event.target===this)closeCustomModal()">
+  <div class="modal-sheet custom-sheet">
+    <div class="drag-pill"></div>
+
+    <div class="custom-header">
+      <div class="ch-badge">✨ PERSONALISED ORDER</div>
+      <h3>DESIGN YOUR VINYL</h3>
+      <p>Upload your photo or describe your design — we print & ship!</p>
+    </div>
+
+    <div class="cf-group">
+      <label>PHONE BRAND *</label>
+      <select id="customBrand" onchange="populateCustomModels()">
+        <option value="">— Select Your Brand —</option>
+      </select>
+    </div>
+
+    <div class="cf-group">
+      <label>PHONE MODEL *</label>
+      <select id="customModel">
+        <option value="">— Select Model —</option>
+      </select>
+    </div>
+
+    <div class="cf-group">
+      <label>DESIGN TYPE</label>
+      <div class="dt-tabs">
+        <div class="dt-tab active" id="dtPhoto" onclick="setDType('photo')">📸 Upload Photo</div>
+        <div class="dt-tab" id="dtDescribe" onclick="setDType('describe')">✏️ Describe Design</div>
+      </div>
+    </div>
+
+    <div id="photoSection">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('photoFile').click()">
+        <div class="uz-icon">📁</div>
+        <div class="uz-text">Tap to upload your photo</div>
+        <div class="uz-hint">JPG · PNG · HEIC up to 10MB</div>
+      </div>
+      <div id="uploadPreview">
+        <img id="prevImg" src="" alt="Preview">
+        <button class="clear-photo" onclick="clearPhoto()">✕ Remove Photo</button>
+      </div>
+      <input type="file" id="photoFile" accept="image/*" style="display:none" onchange="previewPhoto(this)">
+    </div>
+
+    <div id="describeSection" style="display:none">
+      <div class="cf-group">
+        <label>DESCRIBE YOUR DESIGN *</label>
+        <textarea id="designDescText" placeholder="e.g. Dark galaxy theme with gold stars, my initials 'RK' in the bottom corner, matte black finish, vibrant colours..."></textarea>
+      </div>
+    </div>
+
+    <div class="cf-group">
+      <label>NAME / TEXT TO PRINT <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+      <input type="text" id="customText" placeholder="e.g. ROHAN, #BOSS, your tagline...">
+    </div>
+
+    <div class="cf-group">
+      <label>FINISH PREFERENCE</label>
+      <select id="customFinish">
+        <option value="matte">Matte (No Glare) – Most Popular</option>
+        <option value="glossy">Glossy (Shiny)</option>
+        <option value="texture">3D Texture Feel</option>
+      </select>
+    </div>
+
+    <div class="price-est">
+      <div class="pe-label">CUSTOM DESIGN PRICE</div>
+      <div class="pe-price">₹349</div>
+    </div>
+
+    <div class="photo-note">
+      📸 <b style="color:var(--white)">If uploading a photo</b> — after tapping below, also send your photo in the WhatsApp chat for best print quality.
+    </div>
+
+    <button class="custom-wa-btn" onclick="submitCustom()">
+      💬 Request via WhatsApp
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  CONFIG  ← update these two lines for your store
+// ═══════════════════════════════════════════════════════════════════
+const CFG = {
+  wa:    '919999999999',    // WhatsApp Business number (with country code, no +)
+  upiId: 'skinriot@paytm', // Your Paytm / any UPI ID
+  upiName: 'SkinRiot',
+};
+
+// ═══════════════════════════════════════════════════════════════════
+//  PHONE BRANDS & MODELS
+// ═══════════════════════════════════════════════════════════════════
+const BRANDS = {
+  'Apple':    ['iPhone 16 Pro Max','iPhone 16 Pro','iPhone 16 Plus','iPhone 16','iPhone 15 Pro Max','iPhone 15 Pro','iPhone 15 Plus','iPhone 15','iPhone 14 Pro Max','iPhone 14 Pro','iPhone 14','iPhone 13 Pro Max','iPhone 13 Pro','iPhone 13','iPhone 12 Pro Max','iPhone 12'],
+  'Samsung':  ['Galaxy S25 Ultra','Galaxy S25+','Galaxy S25','Galaxy S24 Ultra','Galaxy S24+','Galaxy S24','Galaxy S23 Ultra','Galaxy A55 5G','Galaxy A35 5G','Galaxy A25 5G','Galaxy A15','Galaxy M55 5G','Galaxy M35 5G','Galaxy F55 5G','Galaxy Z Fold 6','Galaxy Z Flip 6'],
+  'OnePlus':  ['OnePlus 13','OnePlus 12','OnePlus 12R','OnePlus Nord 4','OnePlus Nord CE 4','OnePlus Nord CE 4 Lite','OnePlus Open'],
+  'Realme':   ['Realme GT 7 Pro','Realme GT 6T','Realme GT 6','Realme 13 Pro+','Realme 13 Pro','Realme 12 Pro+','Realme 12 Pro','Realme Narzo 70 Pro','Realme C67 5G'],
+  'Xiaomi':   ['Xiaomi 14 Ultra','Xiaomi 14 Pro','Xiaomi 14','Xiaomi 13 Pro','Xiaomi 13T Pro'],
+  'Redmi':    ['Redmi Note 14 Pro+','Redmi Note 14 Pro 5G','Redmi Note 14','Redmi Note 13 Pro+','Redmi Note 13 Pro 5G','Redmi Note 13','Redmi 13C 5G','Redmi A3'],
+  'POCO':     ['POCO X7 Pro','POCO X7','POCO F6 Pro','POCO F6','POCO M7 Pro 5G','POCO C75'],
+  'Vivo':     ['Vivo X200 Pro','Vivo X200','Vivo X100 Pro','Vivo V40 Pro','Vivo V40','Vivo V30 Pro','Vivo V30','Vivo Y300 5G','Vivo Y200 5G'],
+  'Oppo':     ['Oppo Find X8 Pro','Oppo Find X8','Oppo Reno 13 Pro','Oppo Reno 13','Oppo Reno 12 Pro','Oppo F27 Pro 5G','Oppo A3 Pro'],
+  'iQOO':     ['iQOO 13','iQOO 12','iQOO Neo 10R','iQOO Neo 9 Pro','iQOO Z9 Pro 5G','iQOO Z9 Turbo'],
+  'Nothing':  ['Nothing Phone (3a) Pro','Nothing Phone (3a)','Nothing Phone (2a) Plus','Nothing Phone (2a)','Nothing Phone (2)'],
+  'Motorola': ['Moto Edge 50 Pro','Moto Edge 50','Moto G85 5G','Moto G75 5G','Moto G64 5G','Moto G54 5G'],
+};
+
+// ═══════════════════════════════════════════════════════════════════
+//  PRODUCTS
+// ═══════════════════════════════════════════════════════════════════
+const CUSTOM_CARD = {
+  id:'custom',name:'Custom Vinyl Design',emoji:'🎨',price:349,
+  category:'custom',rating:5.0,badge:'✨CUSTOM',isCustom:true,
+  desc:'Print your own photo or unique art on a premium vinyl back lamination. 100% personalised — your photo, your style, your phone.',
+};
+const DEFAULT_PRODUCTS = [
+  {id:1,name:'Pink Monster',      emoji:'👾',price:250,category:'3d',      rating:4.5,badge:'HOT',  desc:'Ferocious neon pink beast takes over your phone. Ultra-vivid 3D-feel vinyl texture with drip art detailing.'},
+  {id:2,name:'Textured Waves',    emoji:'🌊',price:250,category:'abstract', rating:4.7,badge:'NEW',  desc:'Inspired by Hokusai\'s great wave. Deep blue ocean vinyl texture with a matte-silk finish lamination.'},
+  {id:3,name:'Green Mustang',     emoji:'🏎️',price:250,category:'cars',     rating:4.6,badge:'',     desc:'For the speed-obsessed. Lime green muscle car with explosive typography — premium vinyl back lamination.'},
+  {id:4,name:'BMW Edition',       emoji:'🚗',price:250,category:'cars',     rating:4.8,badge:'',     desc:'Understated power. BMW-inspired racing livery in silver and blue with carbon-weave vinyl texture.'},
+  {id:5,name:'Circuit Board',     emoji:'🔌',price:250,category:'minimal',  rating:4.4,badge:'',     desc:'Clean circuit board aesthetic with gold trace lines on a transparent vinyl lamination.'},
+  {id:6,name:'Neon Kanji',        emoji:'🔮',price:250,category:'anime',    rating:4.9,badge:'🔥TOP', desc:'Bold Japanese kanji glowing neon pink on ultra-dark vinyl. Anime meets streetwear.'},
+  {id:7,name:'Aurora Borealis',   emoji:'🌌',price:250,category:'nature',   rating:4.7,badge:'',     desc:'Northern lights in ultra-high definition vinyl. Deep purple to emerald green gradient lamination.'},
+  {id:8,name:'Acid Drip',         emoji:'🎨',price:250,category:'abstract', rating:4.6,badge:'NEW',  desc:'Psychedelic paint drips in electric yellow, magenta and cyan. Street art vinyl lamination.'},
+];
+
+// ═══════════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════════
+let cart = [];
+let activeProd = null;
+let dType = 'photo';
+let activePayload = {}; // holds orderId & total for WA confirm
+
+// ═══════════════════════════════════════════════════════════════════
+//  VIEWS
+// ═══════════════════════════════════════════════════════════════════
+function switchView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.getElementById('bnav-' + name).classList.add('active');
+  if (name === 'search') initSearch();
+  if (name === 'cart')   renderCart();
+  if (name === 'account') renderOrders();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  PRODUCTS
+// ═══════════════════════════════════════════════════════════════════
+function getAllProducts() {
+  const stored = JSON.parse(localStorage.getItem('skinriot_products') || '[]');
+  return [CUSTOM_CARD, ...stored, ...DEFAULT_PRODUCTS];
+}
+
+function productCardHTML(p) {
+  const click = p.isCustom ? `openCustomModal()` : `openProd(${p.id})`;
+  return `
+    <div class="product-card${p.isCustom?' is-custom':''}" onclick="${click}">
+      ${p.badge ? `<div class="product-badge${p.isCustom?' badge-custom':''}">${p.badge}</div>` : ''}
+      <div class="product-img"><div class="placeholder">${p.emoji}</div></div>
+      <div class="product-info">
+        ${p.isCustom ? '<div class="custom-eyebrow">PERSONALISED</div>' : ''}
+        <div class="product-name">${p.name}</div>
+        <div class="product-prices">
+          <div class="product-price">₹${p.price}</div>
+          ${!p.isCustom ? '<div class="product-old">₹450</div>' : '<div style="font-size:10px;color:var(--cyan)">Your Design</div>'}
+        </div>
+        <div class="product-rating"><span class="stars">★★★★${p.rating>=4.8?'★':''}</span> ${p.rating}</div>
+      </div>
+    </div>`;
+}
+
+function renderProducts(filter='all') {
+  const prods = getAllProducts().filter(p => filter==='all' || p.category===filter);
+  document.getElementById('productsGrid').innerHTML = prods.map(productCardHTML).join('');
+}
+
+function filterCat(el, cat) {
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderProducts(cat);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  SEARCH
+// ═══════════════════════════════════════════════════════════════════
+function initSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('sClear').style.display = 'none';
+  renderSearchGrid(getAllProducts());
+  document.getElementById('searchLabel').textContent = 'ALL LAMINATIONS';
+  document.getElementById('noResults').style.display = 'none';
+}
+
+function doSearch(q) {
+  q = q.toLowerCase().trim();
+  document.getElementById('sClear').style.display = q ? 'flex' : 'none';
+  const all = getAllProducts();
+  const res = q ? all.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.category.toLowerCase().includes(q) ||
+    (p.desc && p.desc.toLowerCase().includes(q))
+  ) : all;
+  const lbl = q ? `${res.length} RESULT${res.length!==1?'S':''} FOR "${q.toUpperCase()}"` : 'ALL LAMINATIONS';
+  document.getElementById('searchLabel').textContent = lbl;
+  document.getElementById('noResults').style.display = res.length===0 ? 'block' : 'none';
+  renderSearchGrid(res);
+}
+
+function renderSearchGrid(prods) {
+  document.getElementById('searchGrid').innerHTML = prods.map(productCardHTML).join('');
+}
+
+function setSearch(term) {
+  document.getElementById('searchInput').value = term;
+  doSearch(term);
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  doSearch('');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  PRODUCT MODAL
+// ═══════════════════════════════════════════════════════════════════
+function buildBrandSelect(selId) {
+  document.getElementById(selId).innerHTML =
+    '<option value="">— Choose Brand —</option>' +
+    Object.keys(BRANDS).map(b => `<option value="${b}">${b}</option>`).join('');
+}
+
+function populateModalModels() {
+  const brand = document.getElementById('modalBrand').value;
+  document.getElementById('modalModel').innerHTML = brand
+    ? BRANDS[brand].map(m => `<option value="${m}">${m}</option>`).join('')
+    : '<option value="">— Choose Model —</option>';
+}
+
+function openProd(id) {
+  const p = getAllProducts().find(x => x.id === id && !x.isCustom);
+  if (!p) return;
+  activeProd = p;
+  document.getElementById('modalImg').innerHTML = `<div style="font-size:80px;display:flex;align-items:center;justify-content:center;height:100%">${p.emoji}</div>`;
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalPrice').textContent = `₹${p.price}`;
+  document.getElementById('modalBtnPrice').textContent = `₹${p.price}`;
+  document.getElementById('modalDesc').textContent = p.desc;
+  buildBrandSelect('modalBrand');
+  document.getElementById('modalModel').innerHTML = '<option value="">— Choose Model —</option>';
+  document.getElementById('productModal').classList.add('open');
+}
+
+function closeProdModal() {
+  document.getElementById('productModal').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  CART
+// ═══════════════════════════════════════════════════════════════════
+function addToCart() {
+  const brand = document.getElementById('modalBrand').value;
+  const model = document.getElementById('modalModel').value;
+  if (!brand || !model) { toast('⚠️ Please select your phone brand & model'); return; }
+
+  const key = `${activeProd.id}__${brand}__${model}`;
+  const existing = cart.find(i => i.key === key);
+  if (existing) { existing.qty++; }
+  else {
+    cart.push({ key, id: activeProd.id, name: activeProd.name, emoji: activeProd.emoji,
+      price: activeProd.price, brand, model, qty: 1 });
+  }
+  updateBadge();
+  closeProdModal();
+  toast(`🛒 ${activeProd.name} added to cart!`);
+}
+
+function addSeasonalToCart() {
+  const existing = cart.find(i => i.id === 'seasonal');
+  if (existing) { existing.qty++; }
+  else {
+    cart.push({ key:'seasonal', id:'seasonal', name:'Seasonal Pack (3 Vinyl Wraps)', emoji:'🎁',
+      price:199, brand:'All Brands', model:'3 laminations/month', qty:1 });
+  }
+  updateBadge();
+  toast('🎉 Seasonal Pack added to cart!');
+}
+
+function updateBadge() {
+  const n = cart.reduce((s,i)=>s+i.qty,0);
+  const b = document.getElementById('cartBadge');
+  b.textContent = n;
+  b.classList.toggle('show', n > 0);
+}
+
+function renderCart() {
+  const sub = cart.reduce((s,i)=>s+i.price*i.qty, 0);
+  const ship = sub >= 499 ? 0 : 49;
+  const total = sub + ship;
+  const empty = cart.length === 0;
+
+  document.getElementById('cartSub').textContent = `${cart.reduce((s,i)=>s+i.qty,0)} item${cart.reduce((s,i)=>s+i.qty,0)!==1?'s':''}`;
+  document.getElementById('cartEmptyState').style.display = empty ? 'block' : 'none';
+  document.getElementById('cartFilledState').style.display = empty ? 'none' : 'block';
+  if (!empty) {
+    document.getElementById('cartItemsList').innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="ci-emoji">${item.emoji}</div>
+        <div class="ci-info">
+          <div class="ci-name">${item.name}</div>
+          <div class="ci-model">📱 ${item.brand} ${item.model}</div>
+          <div class="ci-qty">
+            <button class="qty-btn" onclick="changeQty('${item.key}',-1)">−</button>
+            <div class="qty-num">${item.qty}</div>
+            <button class="qty-btn" onclick="changeQty('${item.key}',1)">+</button>
+          </div>
+        </div>
+        <div class="ci-right">
+          <div class="ci-price">₹${item.price*item.qty}</div>
+          <button class="ci-remove" onclick="removeItem('${item.key}')">Remove</button>
+        </div>
+      </div>`).join('');
+    document.getElementById('sSubtotal').textContent = `₹${sub}`;
+    document.getElementById('sShipping').textContent = `₹${49}`;
+    document.getElementById('sShipRow').style.display = ship ? 'flex' : 'none';
+    document.getElementById('sFreeRow').style.display = ship ? 'none' : 'flex';
+    document.getElementById('sTotal').textContent = `₹${total}`;
+  }
+}
+
+function changeQty(key, delta) {
+  const item = cart.find(i=>i.key===key);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(i=>i.key!==key);
+  updateBadge(); renderCart();
+}
+
+function removeItem(key) {
+  cart = cart.filter(i=>i.key!==key);
+  updateBadge(); renderCart();
+  toast('🗑️ Item removed');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  PAYMENT MODAL
+// ═══════════════════════════════════════════════════════════════════
+function openPaymentModal() {
+  if (cart.length === 0) return;
+  const sub   = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const ship  = sub >= 499 ? 0 : 49;
+  const total = sub + ship;
+  const ordId = 'SR-' + Date.now().toString().slice(-8);
+
+  activePayload = { ordId, total };
+
+  document.getElementById('payAmount').textContent  = `₹${total}`;
+  document.getElementById('payOrderId').textContent = ordId;
+  document.getElementById('showUpiId').textContent  = CFG.upiId;
+
+  // Generate real UPI deep-link QR
+  const upiLink = `upi://pay?pa=${CFG.upiId}&pn=${encodeURIComponent(CFG.upiName)}&am=${total}&cu=INR&tn=${ordId}`;
+  setTimeout(() => {
+    if (typeof QRious !== 'undefined') {
+      new QRious({ element: document.getElementById('upiQR'), value: upiLink, size: 180, background:'#ffffff', foreground:'#0A0A0F', padding: 8 });
+    }
+  }, 80);
+
+  document.getElementById('paymentModal').classList.add('open');
+}
+
+function closePayModal() { document.getElementById('paymentModal').classList.remove('open'); }
+
+function copyUPI() {
+  navigator.clipboard.writeText(CFG.upiId).then(()=>toast('✅ UPI ID copied!')).catch(()=>toast('UPI: '+CFG.upiId));
+}
+
+function confirmViaWA() {
+  const { ordId, total } = activePayload;
+  const lines = cart.map(i=>`• ${i.name} (${i.brand} – ${i.model}) ×${i.qty}  ₹${i.price*i.qty}`).join('\n');
+  const msg =
+`🛒 *SkinRiot – Payment Done*
+
+Order ID: *${ordId}*
+Total Paid: *₹${total}*
+
+*Items:*
+${lines}
+
+Payment sent to UPI: ${CFG.upiId}
+Please confirm & share delivery ETA 📦🙏`;
+
+  // Save order to localStorage
+  const orders = JSON.parse(localStorage.getItem('skinriot_orders')||'[]');
+  orders.unshift({ ordId, total, items:[...cart], date:new Date().toISOString(), status:'Pending Verification' });
+  localStorage.setItem('skinriot_orders', JSON.stringify(orders));
+
+  cart = []; updateBadge(); closePayModal();
+  toast('✅ Redirecting to WhatsApp...');
+  setTimeout(()=>openWA(msg), 400);
+  setTimeout(()=>{ switchView('account'); }, 1200);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  CUSTOM DESIGN MODAL
+// ═══════════════════════════════════════════════════════════════════
+function openCustomModal() {
+  buildBrandSelect('customBrand');
+  document.getElementById('customModel').innerHTML = '<option value="">— Choose Model —</option>';
+  document.getElementById('customModal').classList.add('open');
+}
+
+function closeCustomModal() { document.getElementById('customModal').classList.remove('open'); }
+
+function populateCustomModels() {
+  const brand = document.getElementById('customBrand').value;
+  document.getElementById('customModel').innerHTML = brand
+    ? BRANDS[brand].map(m=>`<option value="${m}">${m}</option>`).join('')
+    : '<option value="">— Choose Model —</option>';
+}
+
+function setDType(type) {
+  dType = type;
+  document.getElementById('dtPhoto').classList.toggle('active', type==='photo');
+  document.getElementById('dtDescribe').classList.toggle('active', type==='describe');
+  document.getElementById('photoSection').style.display    = type==='photo' ? 'block' : 'none';
+  document.getElementById('describeSection').style.display = type==='describe' ? 'block' : 'none';
+}
+
+function previewPhoto(input) {
+  if (!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('prevImg').src = e.target.result;
+    document.getElementById('uploadZone').style.display    = 'none';
+    document.getElementById('uploadPreview').style.display = 'block';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function clearPhoto() {
+  document.getElementById('photoFile').value = '';
+  document.getElementById('prevImg').src = '';
+  document.getElementById('uploadZone').style.display    = 'block';
+  document.getElementById('uploadPreview').style.display = 'none';
+}
+
+function submitCustom() {
+  const brand  = document.getElementById('customBrand').value;
+  const model  = document.getElementById('customModel').value;
+  const finish = document.getElementById('customFinish').value;
+  const text   = document.getElementById('customText').value.trim();
+
+  if (!brand || !model) { toast('⚠️ Please select your phone brand & model'); return; }
+
+  if (dType === 'photo') {
+    if (!document.getElementById('photoFile').files.length) { toast('📸 Please upload your photo first'); return; }
+  } else {
+    const d = document.getElementById('designDescText').value.trim();
+    if (!d) { toast('✏️ Please describe your design'); return; }
+  }
+
+  const descText = dType==='describe' ? document.getElementById('designDescText').value.trim() : '';
+  const hasPhoto = dType==='photo';
+  const finishMap = { matte:'Matte (No Glare)', glossy:'Glossy (Shiny)', texture:'3D Texture Feel' };
+
+  const msg =
+`🎨 *Custom Vinyl Lamination – SkinRiot*
+
+📱 *Phone:* ${brand} ${model}
+🎨 *Type:* ${hasPhoto ? 'Custom Photo Print' : 'Described Design'}
+${descText ? `✏️ *Design:*\n${descText}\n` : ''}${text ? `✍️ *Text/Name:* ${text}\n` : ''}✨ *Finish:* ${finishMap[finish]}
+💰 *Price:* ₹349
+
+${hasPhoto ? '📎 *Sending my photo in this chat for printing!*' : ''}
+
+Please confirm & share delivery timeline 🙏`;
+
+  closeCustomModal();
+  toast('💬 Opening WhatsApp...');
+  setTimeout(()=>openWA(msg), 400);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  ACCOUNT / ORDERS
+// ═══════════════════════════════════════════════════════════════════
+function renderOrders() {
+  const orders = JSON.parse(localStorage.getItem('skinriot_orders')||'[]');
+  const el = document.getElementById('myOrders');
+  if (!orders.length) {
+    el.innerHTML = '<div class="acc-card" style="cursor:default"><div class="ac-icon">📦</div><div class="ac-info"><div class="ac-title">No orders yet</div><div class="ac-sub">Completed orders will appear here</div></div></div>';
+    return;
+  }
+  el.innerHTML = orders.slice(0,5).map(o=>`
+    <div class="acc-card" onclick="trackViaWA('${o.ordId}')">
+      <div class="ac-icon">📦</div>
+      <div class="ac-info">
+        <div class="ac-title">${o.ordId}</div>
+        <div class="ac-sub">₹${o.total} · ${o.status} · ${new Date(o.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div>
+      </div>
+      <div class="ac-arrow">›</div>
+    </div>`).join('');
+}
+
+function trackOrder() {
+  const id = document.getElementById('trackInput').value.trim();
+  if (!id) { toast('⚠️ Enter your order ID first'); return; }
+  trackViaWA(id);
+}
+
+function trackViaWA(id) {
+  openWA(`Hi SkinRiot! 👋 Please help me track my order.\n\nOrder ID: *${id}*\n\nKindly share the current status & tracking details. Thank you! 🙏`);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  WHATSAPP HELPERS
+// ═══════════════════════════════════════════════════════════════════
+function openWA(msg) {
+  const m = msg || 'Hi SkinRiot! 👋 I need help with my vinyl lamination order. Can you assist me?';
+  window.open(`https://wa.me/${CFG.wa}?text=${encodeURIComponent(m)}`, '_blank');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════════════════════
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════════
+window.addEventListener('storage', ()=>renderProducts());
+renderProducts();
+</script>
+</body>
+</html>
